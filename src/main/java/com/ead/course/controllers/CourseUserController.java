@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Log4j2
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)//Soluciona problema de CORS
+@CrossOrigin(origins = "*", maxAge = 3600)//Soluciona problema de  CORS
 public class CourseUserController {
     @Autowired
     AuthUserClient authUserClient;
