@@ -1,7 +1,7 @@
 package com.ead.course.specifications;
 
 import com.ead.course.models.CourseModel;
-import com.ead.course.models.CourseUserModel;
+import com.ead.course.models.UserModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
@@ -26,6 +26,12 @@ public class SpecificationTemplate {
     })
     public interface CourseSpec extends Specification<CourseModel> {}
 
+    @And({
+            @Spec(path = "email", spec = Like.class),
+            @Spec(path = "fullName", spec = Like.class),
+            @Spec(path = "userStatus", spec = Equal.class),
+            @Spec(path = "userStatus", spec = Equal.class)})
+    public interface UserSpec extends Specification<UserModel>{}
 
     @Spec(path = "title", spec = Like.class)
     public interface ModuleSpec extends Specification<ModuleModel> {}
@@ -52,12 +58,25 @@ public class SpecificationTemplate {
         };
     }
 
-    public static Specification<CourseModel> courseUserID(final UUID userId){
-        return (root, query, cb) -> {
-            query.distinct(true);
-            Join<CourseModel, CourseUserModel> courseProd = root.join("coursesUsers");//realiza um JOIN
-            return cb.equal(courseProd.get("userId"), userId);
+    public static Specification<UserModel> userCourseId(final UUID courseId){//Metodo que combina consultas: users de um determinado Course, com paginação e Specification.
+        return (root, query, cb) -> {//Lambda. Utilizamos cryteria builder.
+            query.distinct(true);//Definimos que essa query não terá valores duplicados.
+            Root<UserModel> user = root;
+            Root<CourseModel> course = query.from(CourseModel.class);
+            Expression<Collection<UserModel>> coursesUsers = course.get("users");//Extraimos a coleção de users que estão presentes dentro de um determinado curso.
+            return cb.and(cb.equal(course.get("courseId"), courseId), cb.isMember(user, coursesUsers));//Construindo criteria builder para fazer consulta.
         };
     }
+
+    public static Specification<CourseModel> courseUserId(final UUID userId){
+        return (root, query, cb) -> {//Lambda. Utilizamos cryteria builder.
+            query.distinct(true);//Definimos que essa query não terá valores duplicados.
+            Root<CourseModel> course = root;
+            Root<UserModel> user = query.from(UserModel.class);
+            Expression<Collection<CourseModel>> usersCourses = user.get("courses");//Extraimos a coleção de courses que estão presentes dentro de um determinado user.
+            return cb.and(cb.equal(course.get("userId"), userId), cb.isMember(course, usersCourses));//Construindo criteria builder para fazer consulta.
+        };
+    }
+
 
 }

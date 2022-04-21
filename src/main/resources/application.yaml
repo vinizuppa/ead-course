@@ -6,7 +6,7 @@ spring:
   application:
     name: ead-course-service #nome da aplicação.
   datasource:
-    url: jdbc:postgresql://localhost:5432/ead-course #Url de acesso ao banco de dados
+    url: jdbc:postgresql://localhost:5432/ead-course-v2 #Url de acesso ao banco de dados
     username: postgres #Usuario do banco
     password: root #Senha do banco
 

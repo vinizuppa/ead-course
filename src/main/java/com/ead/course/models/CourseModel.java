@@ -6,12 +6,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -53,11 +51,10 @@ public class CourseModel implements Serializable {
     private Set<ModuleModel> modules;//Usamos o SET pois o SET é uma lista não ordenada, que não permite duplicatas.
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)//Define o tipo de acesso a esse atributo. Nesse caso o Write_Only define que sempre que for realizada uma consulta, esse campo será oculto.
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private Set<CourseUserModel> coursesUsers;
-
-    public CourseUserModel convertToCourseUserModel(UUID userId){//Conversão
-        return new CourseUserModel(null, userId, this);
-    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(     name = "TB_COURSES_USERS",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))//Join table define o mapeamento para criar uma tabela intermediaria, por conta que temos um relacionamento many to many.
+    private Set<UserModel> users;
 
 }
