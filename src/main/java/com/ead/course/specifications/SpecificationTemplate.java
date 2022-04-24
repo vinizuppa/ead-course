@@ -74,7 +74,7 @@ public class SpecificationTemplate {
             Root<CourseModel> course = root;
             Root<UserModel> user = query.from(UserModel.class);
             Expression<Collection<CourseModel>> usersCourses = user.get("courses");//Extraimos a coleção de courses que estão presentes dentro de um determinado user.
-            return cb.and(cb.equal(course.get("userId"), userId), cb.isMember(course, usersCourses));//Construindo criteria builder para fazer consulta.
+            return cb.and(cb.equal(user.get("userId"), userId), cb.isMember(course, usersCourses));//Construindo criteria builder para fazer consulta.
         };
     }
 
