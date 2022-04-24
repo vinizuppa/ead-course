@@ -29,6 +29,14 @@ public class UserConsumer {
             case CREATE:
                 userService.save(userModel);
                 break;
+
+            case DELETE:
+                userService.delete(userEventDto.getUserId());
+                break;
+
+            case UPDATE:
+                userService.save(userModel);
+                break;
         }
     }
 }

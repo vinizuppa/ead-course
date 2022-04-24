@@ -32,6 +32,8 @@ public class CourseValidator implements Validator {
     }
 
     private void validateUserInstructor(UUID userInstructor, Errors errors){
+
+
 //        ResponseEntity<UserDto> responseUserInstructor;
 //        try {
 //            responseUserInstructor = authUserClient.getOneUserById(userInstructor);
