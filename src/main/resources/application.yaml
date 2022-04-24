@@ -21,9 +21,12 @@ spring:
       hibernate:
         show_sql: true #Mostra comandos SQL que est?o sendo executados na aplica??o nos logs
 
-output:
-  ansi:
-    enabled: always #Define para aparecer as cores dos logs no console do Windows também(padrão ANSI de cores).
+  output:
+    ansi:
+      enabled: always #Define para aparecer as cores dos logs no console do Windows também(padrão ANSI de cores).
+
+  rabbitmq:
+    addresses: amqps://asepknsw:AkZI1YjGQhqp8qSAFcm56tHkiXyiOjiE@shark.rmq.cloudamqp.com/asepknsw #Endereço do rabbitMq para comunicação com a instancia do Broker.
 
 logging:
   level:
@@ -36,6 +39,12 @@ ead:
   api:
     url:
       authuser: 'http://ead-authuser-service/ead-authuser' #Define URL do microservice authuser. Nesse caso passamos o Id Eureka correspondente ao microservice desejado.
+  broker:
+    exchange:
+      userEventExchange: ead.userevent
+    queue:
+      userEventQueue: #NOme da fila que o microservice de curso estara escutando.
+        name: ead.userevent.ms.course
 
 eureka: #Configurações do Eureka
   client:

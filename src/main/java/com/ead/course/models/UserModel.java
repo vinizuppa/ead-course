@@ -25,7 +25,7 @@ public class UserModel implements Serializable {
     @Column(nullable = false, unique = true, length = 50)
     private String email;
     @Column(nullable = false, length = 150)
-    private String fullName;
+    private String fullname;
     @Column(nullable = false)
     private String userStatus;
     @Column(nullable = false)
