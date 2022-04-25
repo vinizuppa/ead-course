@@ -13,7 +13,15 @@ public interface CourseRepository extends JpaRepository<CourseModel, UUID>, JpaS
     @Query(value = "select case when count(tcu) > 0 THEN true ELSE false END From tb_courses_users tcu WHERE tcu.course_id= :courseId and tcu.user_id= :userId", nativeQuery = true)
     boolean existsByCourseAndUser(@Param("courseId") UUID courseId, @Param("userId") UUID userId);
 
-    @Modifying//Anotação que permite persistir algo no banco(INSERT)
+    @Modifying//Anotação que permite persistir algo no banco(INSERT,UPDATE,DELETE)
     @Query(value = "insert into tb_courses_users values (:courseId, :userId)", nativeQuery = true)
     void saveCourseUser(@Param("courseId") UUID courseId, @Param("userId") UUID userId);
+
+    @Modifying//Anotação que permite persistir algo no banco(INSERT,UPDATE,DELETE)
+    @Query(value = "delete from tb_courses_users where course_id= :courseId", nativeQuery = true)//Deleta na tabela courses_users pelo courseId.
+    void deleteCourseUserByCourse(@Param("courseId") UUID courseId);
+
+    @Modifying//Anotação que permite persistir algo no banco(INSERT,UPDATE,DELETE)
+    @Query(value = "delete from tb_courses_users where user_id= :userId", nativeQuery = true)//Deleta na tabela courses_users pelo userId.
+    void deleteCourseUserByUser(@Param("userId") UUID userId);
 }
