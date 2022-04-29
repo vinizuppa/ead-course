@@ -1,54 +1,10 @@
-server:
-  port: 8082 #Porta que vai rodar a aplica??o
-  servlet:
-    context-path: '/ead-course/' #Define o nome do caminho da aplicação para ser encontrada pelo API Gateway
+
 spring:
   application:
-    name: ead-course-service #nome da aplicação.
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ead-course-v2 #Url de acesso ao banco de dados
-    username: postgres #Usuario do banco
-    password: root #Senha do banco
-
-  jpa:
-    hibernate:
-      ddl-auto: update #O update indica ao spring para criar as tabelas no banco de acordo com os models
-      dialect: org.hibernate.dialect.PostgreSQLDialect
-      jdbc:
-        lob.non-contextual-creation: true #Desabilita consulta a alguns metadados que podem gerar erros nos logs
-
-    properties:
-      hibernate:
-        show_sql: true #Mostra comandos SQL que est?o sendo executados na aplica??o nos logs
-
-  output:
-    ansi:
-      enabled: always #Define para aparecer as cores dos logs no console do Windows também(padrão ANSI de cores).
-
-  rabbitmq:
-    addresses: amqps://asepknsw:AkZI1YjGQhqp8qSAFcm56tHkiXyiOjiE@shark.rmq.cloudamqp.com/asepknsw #Endereço do rabbitMq para comunicação com a instancia do Broker.
-
-logging:
-  level:
-    com.ead: TRACE #Define o nível de log que será utilizado na aplicação.
-    root: INFO #Definimos para toda raiz da aplicação, para ser utilizado o INFO em todas classes.
-    org.springframework.web: DEBUG #Define o nível de log para um pacote especifico
-    org.hibernate: INFO
-
-ead:
-  api:
-    url:
-      authuser: 'http://ead-authuser-service/ead-authuser' #Define URL do microservice authuser. Nesse caso passamos o Id Eureka correspondente ao microservice desejado.
-  broker:
-    exchange:
-      userEventExchange: ead.userevent
-    queue:
-      userEventQueue: #NOme da fila que o microservice de curso estara escutando.
-        name: ead.userevent.ms.course
-
-eureka: #Configurações do Eureka
-  client:
-    service-url:
-      defaultZone: 'http://localhost:8761/eureka' #Endereço onde o eureka server está
-  instance:
-      hostname: localhost
+    name: ead-course-service
+  config:
+    import: 'configserver:'
+  cloud:
+    config:
+      discovery:
+        serviceId: ead-config-server
